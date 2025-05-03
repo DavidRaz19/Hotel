@@ -1,0 +1,62 @@
+-- Création de la table Administrateur
+CREATE TABLE IF NOT EXISTS Administrateur (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT NOT NULL,
+    prenom TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+);
+
+-- Création de la table Chambre
+CREATE TABLE IF NOT EXISTS Chambre (
+    numero INTEGER PRIMARY KEY,
+    type TEXT NOT NULL,
+    statut TEXT NOT NULL,
+    prix REAL NOT NULL
+);
+
+-- Création de la table Client
+CREATE TABLE IF NOT EXISTS Client (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT NOT NULL,
+    prenom TEXT NOT NULL,
+    email TEXT NOT NULL,
+    telephone TEXT,
+    adresse TEXT
+);
+
+-- Création de la table Reservation
+CREATE TABLE IF NOT EXISTS Reservation (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dateDebut TEXT NOT NULL,
+    dateFin TEXT NOT NULL,
+    numeroChambre INTEGER NOT NULL,
+    clientId INTEGER NOT NULL,
+    prixTotal REAL NOT NULL,
+    statut TEXT NOT NULL,
+    dateCreation TEXT NOT NULL,
+    FOREIGN KEY (numeroChambre) REFERENCES Chambre(numero),
+    FOREIGN KEY (clientId) REFERENCES Client(id)
+);
+
+-- Création de la table Facture
+CREATE TABLE IF NOT EXISTS Facture (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reservationId INTEGER NOT NULL,
+    dateFacturation TEXT NOT NULL,
+    montantTotal REAL NOT NULL,
+    statutPaiement TEXT NOT NULL,
+    FOREIGN KEY (reservationId) REFERENCES Reservation(id)
+);
+
+-- Insertion d'un administrateur par défaut (username: admin, password: admin123)
+INSERT INTO Administrateur (nom, prenom, username, password) 
+VALUES ('Admin', 'Default', 'admin', 'admin123');
+
+-- Insertion de quelques chambres pour démarrer
+INSERT INTO Chambre (numero, type, statut, prix) VALUES 
+(101, 'Simple', 'Disponible', 75.0),
+(102, 'Simple', 'Disponible', 75.0),
+(201, 'Double', 'Disponible', 120.0),
+(202, 'Double', 'Disponible', 120.0),
+(301, 'Suite', 'Disponible', 200.0);
